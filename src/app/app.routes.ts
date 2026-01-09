@@ -5,43 +5,33 @@ import { LandingPage } from './pages/landing-page/landing-page';
 import { Login } from './login/login';
 import { Register } from './register/register';
 import { Home } from './pages/home/home';
-
+import { Profile } from './pages/profile/profile';
 export const routes: Routes = [
   {
-        path: '',
-        component: BlankLayout,
-        children: [{
-            path: '', component: LandingPage,
-        }]
+    path: '',
+    component: BlankLayout,
+    children: [
+      { 
+        path: '', component: LandingPage 
+    },
+      { 
+        path: 'login', component: Login 
+    },
+      { path: 'register', component: Register },
+    ],
   },
   {
-        path: '',
-        component: Login,
-        children: [{
-            path: 'login', component: Login
-        }]
+    path: '',
+    component: MainLayout,
+    children: [
+      {
+        path: 'home',
+        component: Home,
+        children: [
+          { path: 'profile', component: Profile },
+        ],
+      },
+    ],
   },
-  {
-        path: '',
-        component: Register,
-        children: [{
-            path: 'register', component: Register
-        }]
-  },
-  {
-        path: '',
-        component: MainLayout,
-        children: [{
-            path: 'home', component: Home
-        }]
-  },
-  {
-        path: '',
-        component: MainLayout,
-        children: [{
-            path: '', component: BlankLayout,
-        }]
-  },
-
     { path: '**', redirectTo: '' },
 ];
