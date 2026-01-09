@@ -1,0 +1,25 @@
+<div class="register-page">
+  <form nz-form [formGroup]="validateForm" class="register-form" (ngSubmit)="submitForm()">
+    <h1>Register</h1>
+    <p>Create your account. It's free and only takes a minute.</p>
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your username!">
+        <nz-input-wrapper>
+          <nz-icon nzInputPrefix nzType="user" />
+          <input nz-input type="text" formControlName="username" placeholder="Username"/>
+        </nz-input-wrapper>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-control nzErrorTip="Please input your Password!">
+        <nz-input-password>
+          <nz-icon nzInputPrefix nzType="lock" />
+          <input nz-input type="password" formControlName="password" placeholder="Password"/>
+        </nz-input-password>
+      </nz-form-control>
+    </nz-form-item>
+
+    <button nz-button nzType="primary" (click)="getLogin()"class="register-form-button register-form-margin"> Register</button>
+  </form>
+</div>
