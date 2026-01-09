@@ -18,4 +18,8 @@ export class Home {
   this.router.navigate(['/home/profile']);
   
 }
+  getTable(){
+    console.log('table clicked');
+    this.router.navigate(['/table']);
+  }
 }

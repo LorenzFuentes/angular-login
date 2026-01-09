@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  flex-direction: column;
+  background: #f3f6fb;
+  gap: 10px;
+}
+
+
+:host ::ng-deep nz-table {
+   max-width: 1200px;
+
+  th,
+  td {
+    text-align: center;
+  }
+}

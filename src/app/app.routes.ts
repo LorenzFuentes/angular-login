@@ -6,6 +6,7 @@ import { Login } from './login/login';
 import { Register } from './register/register';
 import { Home } from './pages/home/home';
 import { Profile } from './pages/profile/profile';
+import { Table } from './pages/table/table';
 export const routes: Routes = [
   {
     path: '',
@@ -32,6 +33,13 @@ export const routes: Routes = [
         ],
       },
     ],
+  },
+  {
+    path: '',
+    component: Table,
+    children: [{
+      path: 'table', component: Table
+    }]
   },
     { path: '**', redirectTo: '' },
 ];
