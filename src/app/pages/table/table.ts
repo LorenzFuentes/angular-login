@@ -1,54 +1,83 @@
-import { Component } from '@angular/core';
-import { NzDividerModule } from 'ng-zorro-antd/divider';
-import { NzTableModule } from 'ng-zorro-antd/table';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-
-interface Person {
-  key: string;
+import { NzInputModule } from 'ng-zorro-antd/input';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzTableModule } from 'ng-zorro-antd/table';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzIconModule } from 'ng-zorro-antd/icon';
+import { NzSelectModule } from 'ng-zorro-antd/select';
+import { NzSpaceModule } from 'ng-zorro-antd/space';
+interface ItemData {
+  id: string;
   name: string;
   age: number;
   address: string;
-}
-
-
-@Component({
-  selector: 'app-table',
-  imports: [NzDividerModule, NzTableModule],
+}@Component({
   templateUrl: './table.html',
-  styleUrl: './table.scss',
+  styleUrls: ['./table.scss'],
+  standalone: true,
+  imports: [NzTableModule, NzInputModule, FormsModule, NzPopconfirmModule, NzButtonModule, NzIconModule, NzSelectModule, NzSpaceModule]
 })
-export class Table {
+export class Table implements OnInit {
   constructor(private router: Router) {}
-  listOfData: Person[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park'
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park'
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park'
-    },
-    {
-      key: '4',
-      name: 'Lebron James',
-      age: 41,
-      address: 'Los Angeles No. 1 Lake Park'
-    },
-    {
-      key: '5',
-      name: 'Marc Anthony Zapata',
-      age: 21,
-      address: 'Malolos City No. 1 Lake Park'
+  editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
+  listOfData: ItemData[] = [];
+
+  startEdit(id: string): void {
+    this.editCache[id].edit = true;
+  }
+
+  cancelEdit(id: string): void {
+    const index = this.listOfData.findIndex(item => item.id === id);
+    this.editCache[id] = {
+      data: { ...this.listOfData[index] },
+      edit: false
+    };
+  }
+
+  saveEdit(id: string): void {
+    const index = this.listOfData.findIndex(item => item.id === id);
+    Object.assign(this.listOfData[index], this.editCache[id].data);
+    this.editCache[id].edit = false;
+  }
+
+  updateEditCache(): void {
+    this.listOfData.forEach(item => {
+      this.editCache[item.id] = {
+        edit: false,
+        data: { ...item }
+      };
+    });
+  }
+
+  ngOnInit(): void {
+    const data: ItemData[] = [];
+    for (let i = 0; i < 100; i++) {
+      data.push({
+        id: `${i}`,
+        name: `Edward ${i}`,
+        age: 32,
+        address: `London Park no. ${i}`
+      });
     }
-  ];
+    this.listOfData = data;
+    this.updateEditCache();
+  }
+  onDelete(key: string): void {
+  this.listOfData = this.listOfData.filter(item => item.id !== key);
+  delete this.editCache[key];
+  }
+
+  addUser(): void {
+  }
+  getTable(){
+      console.log('table clicked');
+      this.router.navigate(['/home']);
+    }
+
+  onSearch(){
+    
+  }
+
 }

@@ -41,5 +41,10 @@ export const routes: Routes = [
       path: 'table', component: Table
     }]
   },
+  {
+    path: '',
+    component: Home,
+    children: [{path: 'home', component: Home}]
+  },
     { path: '**', redirectTo: '' },
 ];
