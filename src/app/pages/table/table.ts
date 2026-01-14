@@ -9,6 +9,7 @@ import { NzIconModule } from 'ng-zorro-antd/icon';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { NzSpaceModule } from 'ng-zorro-antd/space';
 interface ItemData {
+  
   id: string;
   name: string;
   age: number;
@@ -23,7 +24,10 @@ export class Table implements OnInit {
   constructor(private router: Router) {}
   editCache: { [key: string]: { edit: boolean; data: ItemData } } = {};
   listOfData: ItemData[] = [];
+  searchId: string = '';
+  originalData: ItemData[] = [];
 
+  
   startEdit(id: string): void {
     this.editCache[id].edit = true;
   }
@@ -51,33 +55,80 @@ export class Table implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    const data: ItemData[] = [];
-    for (let i = 0; i < 100; i++) {
-      data.push({
-        id: `${i}`,
-        name: `Edward ${i}`,
-        age: 32,
-        address: `London Park no. ${i}`
-      });
-    }
-    this.listOfData = data;
-    this.updateEditCache();
+  randomAge(min: number, max: number): number {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  getRandomAddress<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+  }
+  getRandomName<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
   }
   onDelete(key: string): void {
-  this.listOfData = this.listOfData.filter(item => item.id !== key);
-  delete this.editCache[key];
+    this.listOfData = this.listOfData.filter(item => item.id !== key);
+    delete this.editCache[key];
   }
-
-  addUser(): void {
-  }
-  getTable(){
+  getHome(){
       console.log('table clicked');
       this.router.navigate(['/home']);
     }
+  addUser(): void {
+    const newId = Date.now().toString();
+    const newRow: ItemData = {
+      
+      id: newId,
+      name: '',
+      age: 0,
+      address: ''
+    };
 
-  onSearch(){
-    
+    this.listOfData = [newRow, ...this.listOfData];
+
+    this.editCache[newId] = {
+      edit: true,
+      data: { ...newRow }
+    };
   }
+  onSearch(): void {
+    if (!this.searchId) {
+      this.listOfData = [...this.originalData];
+      this.updateEditCache();
+      return;
+    }
 
+    const result = this.originalData.filter(
+      item => item.id === this.searchId
+    );
+
+    this.listOfData = result;
+    this.updateEditCache();
+  }
+  refreshPage() {
+  window.location.reload();
+}
+  ngOnInit(): void {
+    const data: ItemData[] = [];
+    const addresses = [
+    'Malolos Park','Longos Street','Guiguinto Road','San Pablo Boulevard','Manila Avenue','Makiti Cross','Pasay Lane'
+    ];
+    const users = [
+      "James Carter","Olivia Martinez","Daniel Brooks","Sophia Reynolds","Michael Turner","Ava Collins","Ethan Walker","Isabella Hughes","Noah Bennett","Mia Foster",
+      "Lucas Rivera","Emily Anderson","Benjamin Scott","Charlotte Parker","Alexander Morris","Amelia Reed","Henry Coleman","Harper Diaz","Samuel Price","Lily Watson",
+      "Matthew Lopez","Grace Sullivan","Andrew Kim","Natalie Johnson","Joseph Alvarez","Chloe Murphy","David Thompson","Victoria Nguyen","Ryan Patel","Hannah O’Connor",
+      "Nicholas Brown","Ella Robinson","Jonathan Perez","Zoe Wright","Christopher Lee","Madison Hall","Brandon Young","Scarlett Adams","Justin Clark","Penelope Torres",
+      "Aaron Mitchell","Layla Ramirez","Kevin Stewart","Nora Phillips","Thomas Evans","Brooklyn Cruz","Paul Simmons","Audrey Flores","Jason Howard","Camila Sanchez"
+    ];
+
+    for (let i = 0; i < 50; i++) {
+      data.push({
+        id: `${i}`,
+        name: `${this.getRandomName(users)}`,
+        age: this.randomAge(18, 60),
+        address: `${this.getRandomAddress(addresses)} no. ${this.randomAge(1, 200)}`
+      });
+    }
+      this.listOfData = data;
+      this.originalData = [...data]; 
+      this.updateEditCache();
+  }
 }
